@@ -46,6 +46,7 @@ int main()
                     }
                     //usuń poprzednią tablicę
                     delete[] p;
+
                 }
                 cout<<"Podaj wartosc elementu tablicy: ";
                 cin>>tmp[n];  //wstaw nową wartość do tablicy (na koniec)
@@ -137,6 +138,8 @@ int main()
                 {
                     cout << "Nieudana proba zapisu danych do pliku";
                 }
+
+
                 break;
             }
         case 6:
@@ -155,15 +158,19 @@ int main()
                 {
                     n++;
                 }
+                delete[] p;
                 int * p = NULL;
                 p = new int[n];
-                int i = 0;
-                while(!menu_plik.eof())
+                int j = 0;
+
+                menu_plik.close();
+                menu_plik.open("C:\\Gabriela_Solak-menu\\menu.txt", ios::in);
+
+                while(getline(menu_plik, el))
                 {
-                    getline(menu_plik, el);
                     cout << stoi(el)<<endl;
-                    p[i] = stoi(el); //zamiana string na int
-                    i++;
+                    p[j] = stoi(el); //zamiana string na int
+                    j++;
                 }
 
                 menu_plik.close();
@@ -176,4 +183,3 @@ int main()
         }
     }
     return 0;
-}
