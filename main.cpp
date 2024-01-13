@@ -168,8 +168,8 @@ int main()
 
                 while(getline(menu_plik, el))
                 {
-                    cout << stoi(el)<<endl;
                     p[j] = stoi(el); //zamiana string na int
+                    //cout << p[j] << endl;
                     j++;
                 }
 
