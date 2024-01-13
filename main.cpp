@@ -1,5 +1,6 @@
 #include <iostream>
-
+#include <fstream>
+#include <string>
 using namespace std;
 
 int Menu()
@@ -9,10 +10,11 @@ int Menu()
     cout<<"1. Dodaj element tablicy"<<endl;
     cout<<"2. Wstaw element tablicy"<<endl;
     cout<<"3. Usun element tablicy"<<endl;
-    cout<<"4. Wyœwietl elementy tablicy"<<endl;
+    cout<<"4. WyÅ›wietl elementy tablicy"<<endl;
     cout<<"5. Zapisz do pliku"<<endl;
     cout<<"6. Wczytaj z pliku"<<endl;
     cout<<"7. Wyjscie z programu"<<endl;
+    cout<<"> ";
     cin>>x;
     cout<<endl;
     return x;
@@ -35,31 +37,77 @@ int main()
         case 1:
             {
                 int * tmp = NULL;
-                tmp = new int[n+1]; //tworzenie nowej tablicy (o jeden wiêkszej ni¿ poprzednia)
-                if(p != NULL) //je¿eli istnieje poprzednia tablica to:
+                tmp = new int[n+1]; //tworzenie nowej tablicy (o jeden wiÄ™kszej niÅ¼ poprzednia)
+                if(p != NULL) //jeÅ¼eli istnieje poprzednia tablica to:
                 {
                     for(int i=0;i<n;i++)
-                    {//przekopiuj zawartoœæ poprzedniej tablicy do nowej
+                    {//przekopiuj zawartoÅ›Ä‡ poprzedniej tablicy do nowej
                         tmp[i] = p[i];
                     }
-                    //usuñ poprzedni¹ tablicê
+                    //usuÅ„ poprzedniÄ… tablicÄ™
                     delete[] p;
-
                 }
                 cout<<"Podaj wartosc elementu tablicy: ";
-                cin>>tmp[n];  //wstaw now¹ wartoœæ do tablicy (na koniec)
-                p = tmp; //przekopiuj adres nowej tablicy do wskaŸnika p
-                n++; //zwiêksz iloœæ elementów tablicy o 1
+                cin>>tmp[n];  //wstaw nowÄ… wartoÅ›Ä‡ do tablicy (na koniec)
+                p = tmp; //przekopiuj adres nowej tablicy do wskaÅºnika p
+                n++; //zwiÄ™ksz iloÅ›Ä‡ elementÃ³w tablicy o 1
                 break;
             }
         case 2:
             {
                 //wstawienie elementu w dowolne miejsce
+                int ind;
+                int * tmp = NULL;
+                tmp = new int[n+1];
+
+                cout<<"Podaj indeks elementu: ";
+                cin>>ind;
+
+                if(p != NULL && ind >=0 && ind <=n)
+                {
+                    for(int i=n-1; i>=0; i--)
+                    {
+                        if(i>=ind)
+                        {
+                            tmp[i+1] = p[i];
+                        }
+                        else if(i<ind)
+                        {
+                            tmp[i] = p[i];
+                        }
+                    }
+                    delete[] p;
+                    cout<<"Podaj wartosc elementu tablicy: ";
+                    cin>>tmp[ind];
+                    p = tmp;
+                    n++;
+                }
                 break;
             }
         case 3:
             {
                 //usuwanie dowolnego elementu (po indeksie)
+                int usu;
+                int * tmp = NULL;
+                tmp = new int[n-1];
+
+                cout<<"Podaj indeks usuwanego elementu: ";
+                cin>>usu;
+
+                if(p != NULL && usu >= 0 && usu < n)
+                {
+                    for(int i=0, j=0; i<n; ++i)
+                    {
+                        if(i != usu)
+                        {
+                            tmp[j] = p[i];
+                            ++j;
+                        }
+                    }
+                    delete[] p;
+                    p = tmp;
+                    --n;
+                }
                 break;
             }
         case 4:
@@ -75,20 +123,57 @@ int main()
         case 5:
             {
                 //zapis danych do pliku
+                fstream menu_plik;
+                menu_plik.open("C:\\Gabriela_Solak-menu\\menu.txt", ios::out | ios::trunc);
+                if(menu_plik.is_open())
+                {
+                    for(int i=0; i<n; i++)
+                    {
+                        menu_plik << p[i] << endl;
+                    }
+                    menu_plik.close();
+                }
+                else
+                {
+                    cout << "Nieudana proba zapisu danych do pliku";
+                }
                 break;
             }
         case 6:
             {
                 //wczytanie danych z pliku
+                fstream menu_plik;
+                menu_plik.open("C:\\Gabriela_Solak-menu\\menu.txt", ios::in);
+                string el;
+                if(!menu_plik.is_open())
+                {
+                    cout << "Proba wczytania danych z pliku nie powiodla sie";
+                    break;
+                }
+                n = 0;
+                while(getline(menu_plik, el))
+                {
+                    n++;
+                }
+                int * p = NULL;
+                p = new int[n];
+                int i = 0;
+                while(!menu_plik.eof())
+                {
+                    getline(menu_plik, el);
+                    cout << stoi(el)<<endl;
+                    p[i] = stoi(el); //zamiana string na int
+                    i++;
+                }
+
+                menu_plik.close();
                 break;
             }
         default:
             {
                 cout<<"Nieprawidlowa opcja"<<endl;
             }
-
         }
     }
-
     return 0;
 }
