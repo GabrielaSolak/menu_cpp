@@ -10,7 +10,7 @@ int Menu()
     cout<<"1. Dodaj element tablicy"<<endl;
     cout<<"2. Wstaw element tablicy"<<endl;
     cout<<"3. Usun element tablicy"<<endl;
-    cout<<"4. Wyświetl elementy tablicy"<<endl;
+    cout<<"4. Wyswietl elementy tablicy"<<endl;
     cout<<"5. Zapisz do pliku"<<endl;
     cout<<"6. Wczytaj z pliku"<<endl;
     cout<<"7. Wyjscie z programu"<<endl;
@@ -57,6 +57,11 @@ int main()
         case 2:
             {
                 //wstawienie elementu w dowolne miejsce
+                if (n == 0)
+                {
+                    cout << "Tablica jest pusta. Aby dodac pierwszy element, uzyj opcji 1" << endl;
+                    break;
+                }
                 int ind;
                 int * tmp = NULL;
                 tmp = new int[n+1];
@@ -64,7 +69,7 @@ int main()
                 cout<<"Podaj indeks elementu: ";
                 cin>>ind;
 
-                if(p != NULL && ind >=0 && ind <=n)
+                if(ind >=0 && ind <=n)
                 {
                     for(int i=n-1; i>=0; i--)
                     {
@@ -83,11 +88,20 @@ int main()
                     p = tmp;
                     n++;
                 }
+                else
+                {
+                    cout << "Nieprawidlowy indeks (od 0 do " << n << ")" << endl;
+                }
                 break;
             }
         case 3:
             {
                 //usuwanie dowolnego elementu (po indeksie)
+                if(p == NULL)
+                {
+                    cout << "Tablica jest pusta" << endl;
+                    break;
+                }
                 int usu;
                 int * tmp = NULL;
                 tmp = new int[n-1];
@@ -95,7 +109,7 @@ int main()
                 cout<<"Podaj indeks usuwanego elementu: ";
                 cin>>usu;
 
-                if(p != NULL && usu >= 0 && usu < n)
+                if(usu >= 0 && usu < n)
                 {
                     for(int i=0, j=0; i<n; ++i)
                     {
@@ -108,6 +122,10 @@ int main()
                     delete[] p;
                     p = tmp;
                     --n;
+                }
+                else
+                {
+                    cout << "Nieprawidlowy indeks (od 0 do " << n-1 << ")" << endl;
                 }
                 break;
             }
@@ -133,10 +151,11 @@ int main()
                         menu_plik << p[i] << endl;
                     }
                     menu_plik.close();
+                    cout << "Dane zostaly zapisane do pliku" << endl;
                 }
                 else
                 {
-                    cout << "Nieudana proba zapisu danych do pliku";
+                    cout << "Nieudana proba zapisu danych do pliku" << endl;
                 }
 
 
@@ -146,11 +165,11 @@ int main()
             {
                 //wczytanie danych z pliku
                 fstream menu_plik;
-                menu_plik.open("C:\\Gabriela_Solak-menu\\menu.txt", ios::in);
+                menu_plik.open("C:\\menu.txt", ios::in);
                 string el;
                 if(!menu_plik.is_open())
                 {
-                    cout << "Proba wczytania danych z pliku nie powiodla sie";
+                    cout << "Proba wczytania danych z pliku nie powiodla sie" << endl;
                     break;
                 }
                 n = 0;
@@ -164,16 +183,16 @@ int main()
                 int j = 0;
 
                 menu_plik.close();
-                menu_plik.open("C:\\Gabriela_Solak-menu\\menu.txt", ios::in);
+                menu_plik.open("C:\\menu.txt", ios::in);
 
                 while(getline(menu_plik, el))
                 {
                     p[j] = stoi(el); //zamiana string na int
-                    //cout << p[j] << endl;
                     j++;
                 }
 
                 menu_plik.close();
+                cout  << "Dane zostaly wczytane z pliku" << endl;
                 break;
             }
         default:
@@ -183,3 +202,4 @@ int main()
         }
     }
     return 0;
+}
